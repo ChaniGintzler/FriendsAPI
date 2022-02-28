@@ -29,11 +29,11 @@ async  create(createProfileDto: CreateProfileDto): Promise<Profile> {
       runValidators: true
     })
    // !data && this.throwNotFoundException(this.profileModel.modelName)
-
     return data
   }
 
  async  remove(id: string) {
+   console.log('remove',id);
     const deleted = await this.profileModel
     .findByIdAndRemove({ _id: id })
     .exec();
