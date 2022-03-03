@@ -11,12 +11,15 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(user: CreateUserDto): Promise<User> {
-      const createfProfile = new this.userModel(user);
-      return createfProfile.save();
+    const userExists = await this.userModel.exists({ email: user.email });
+    if (userExists) {
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
-
-  async findOne(email: string): Promise<User> {
-    return this.userModel.findOne({ email }).exec();
+    const createfProfile = new this.userModel(user);
+    return createfProfile.save();
   }
 
+  async findOne(email: string): Promise<User> {
+    return this.userModel.findOne({ email:email }).exec();
+  }
 }

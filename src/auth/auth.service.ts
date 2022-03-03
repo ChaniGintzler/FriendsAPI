@@ -29,15 +29,17 @@ export class AuthService {
       if (bcrypt.compare(user.password, password)) {
         const payload = { email: user.email };
         return {
-          token: this.jwtService.sign(payload),
+            email:foundUser.email,
+            userName:foundUser.userName,
+             token: this.jwtService.sign(payload),
         };
       }
-      return new HttpException(
+      throw new HttpException(
         'Incorrect username or password',
         HttpStatus.UNAUTHORIZED,
       );
     }
-    return new HttpException(
+    throw new HttpException(
       'Incorrect username or password',
       HttpStatus.UNAUTHORIZED,
     );
