@@ -12,7 +12,9 @@ import { secret } from './auth/constants';
 // //'mongodb://localhost:27017',
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/friends'),
+    //woIQ33LgRFiiX62B pass friendsAPIUser- user
+    MongooseModule.forRoot(
+      'mongodb+srv://friendsAPIUser:woIQ33LgRFiiX62B@cluster0.xjouu.mongodb.net/friendsdB?retryWrites=true&w=majority'),//mongodb://localhost/friends
     PassportModule,
     ProfilesModule,
     AuthModule,
