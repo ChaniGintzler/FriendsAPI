@@ -9,9 +9,15 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async signup(user: User): Promise<User> {
+    if (user.password == undefined || user.email == undefined) {
+      throw new HttpException(
+        'Incorrect username or password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(user.password, salt);
     const reqBody = {
@@ -26,12 +32,12 @@ export class AuthService {
     const foundUser = await this.usersService.findOne(user.email);
     if (foundUser) {
       const { password } = foundUser;
-      if (bcrypt.compare(user.password, password)) {
+      if (await bcrypt.compare(user.password, password)) {
         const payload = { email: user.email };
         return {
-            email:foundUser.email,
-            userName:foundUser.userName,
-             token: this.jwtService.sign(payload),
+          email: foundUser.email,
+          userName: foundUser.userName,
+          token: this.jwtService.sign(payload),
         };
       }
       throw new HttpException(
